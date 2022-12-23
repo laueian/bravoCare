@@ -18,7 +18,7 @@ router.use(function (req, res, next) {
 
 router.get('/get', (req, res) => {
   jobs
-    .getJobs()
+    .getQuestionOneShifts()
     .then(response => {
       res.status(200).send(response);
     })

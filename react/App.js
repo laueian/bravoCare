@@ -10,10 +10,10 @@ const App = () => {
       setText(text);
     });
 
-    getJobs();
+    getQuestionOneShifts();
   }, []);
 
-  function getJobs() {
+  function getQuestionOneShifts() {
     fetch('/get')
       .then(res => {
         return res.text();
