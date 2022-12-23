@@ -3,7 +3,7 @@ const router = express();
 
 router.get('/foo', (req, res) => res.send('Hello world!'));
 
-const jobs = require('./postgres');
+const postgres = require('./postgres');
 
 router.use(express.json());
 router.use(function (req, res, next) {
@@ -16,9 +16,20 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.get('/get', (req, res) => {
-  jobs
+router.get('/getQuestionOneShifts', (req, res) => {
+  postgres
     .getQuestionOneShifts()
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      res.status(500).send(error);
+    });
+});
+
+router.get('/getShiftOverlap', (req, res) => {
+  postgres
+    .getShiftOverlap()
     .then(response => {
       res.status(200).send(response);
     })

@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 const App = () => {
   const [text, setText] = useState('Loading...');
   const [jobs, setJobs] = useState(false);
+  const [overlapShifts, setOverlapShifts] = useState(false);
 
   useEffect(() => {
     fetch('/foo').then(async response => {
@@ -11,16 +12,26 @@ const App = () => {
     });
 
     getQuestionOneShifts();
+    getShiftOverlap();
   }, []);
 
   function getQuestionOneShifts() {
-    fetch('/get')
+    fetch('/getQuestionOneShifts')
       .then(res => {
         return res.text();
       })
       .then(data => {
         setJobs(data);
-        console.log(data);
+      });
+  }
+
+  function getShiftOverlap() {
+    fetch('/getShiftOverlap')
+      .then(res => {
+        return res.text();
+      })
+      .then(data => {
+        setOverlapShifts(data);
       });
   }
 
@@ -28,6 +39,9 @@ const App = () => {
     <div>
       <h1>{text}</h1>
       {jobs ? jobs : 'There are no jobs'}
+      <br></br>
+      <br></br>
+      {overlapShifts ? overlapShifts : 'There are no shifts that overlap'}
     </div>
   );
 };
