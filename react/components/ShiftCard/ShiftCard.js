@@ -1,8 +1,14 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+import React, {useEffect, useState} from 'react';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 import Card from 'react-bootstrap/Card';
 
-const ShiftCard = ({shiftData}) => {
+const ShiftCard = ({disabled, addChecks, shiftKey, shiftData}) => {
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    addChecks(checked);
+  }, [checked]);
+
   const formattedTime = time => {
     let timeArr = time.split(':');
     timeArr.pop();
@@ -22,11 +28,16 @@ const ShiftCard = ({shiftData}) => {
   };
 
   return (
-    <Button
-      variant="light"
-      size="lg"
+    <ToggleButton
+      className="mb-2"
+      id={`${shiftKey}`}
+      type={'checkbox'}
+      variant={'secondary'}
+      disabled={checked ? false : disabled}
+      checked={checked}
+      onChange={e => setChecked(e.currentTarget.checked)}
       style={{padding: 0, width: '100%', marginTop: '1rem'}}>
-      <Card bg={'secondary'}>
+      <Card bg={'transparent'}>
         <Card.Body>
           <Card.Text>{shiftData.facility_name}</Card.Text>
           <Card.Text>{new Date(shiftData.shift_date).toDateString()}</Card.Text>
@@ -37,7 +48,7 @@ const ShiftCard = ({shiftData}) => {
           </Card.Text>
         </Card.Body>
       </Card>
-    </Button>
+    </ToggleButton>
   );
 };
 

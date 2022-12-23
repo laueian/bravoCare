@@ -9,11 +9,22 @@ import RequestCard from './components/RequestCard/RequestCard';
 const App = () => {
   const [shifts, setShifts] = useState([]);
   const [overlapShifts, setOverlapShifts] = useState([]);
+  const [checks, setChecks] = useState(6);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     getQuestionOneShifts();
     getShiftOverlap();
   }, []);
+
+  // set the appropriate shift cards to disabled or enabled
+  useEffect(() => {
+    if (checks === 2) {
+      setDisabled(true);
+    } else if (checks === 1 || checks === 0) {
+      setDisabled(false);
+    }
+  }, [checks]);
 
   function getQuestionOneShifts() {
     fetch('/getQuestionOneShifts').then(res => {
@@ -31,6 +42,10 @@ const App = () => {
       });
   }
 
+  const addChecks = checked => {
+    checked ? setChecks(prev => prev + 1) : setChecks(prev => prev - 1);
+  };
+
   return (
     <Container id="mainContainer">
       <Container id="requestCardContainer">
@@ -40,7 +55,11 @@ const App = () => {
         <Row xs={1} sm={2} md={3} className="g-6">
           {shifts.map((shift, idx) => (
             <Col key={idx.toString()}>
-              <ShiftCard shiftData={shift}></ShiftCard>
+              <ShiftCard
+                disabled={disabled}
+                addChecks={addChecks}
+                shiftKey={idx.toString()}
+                shiftData={shift}></ShiftCard>
             </Col>
           ))}
         </Row>
