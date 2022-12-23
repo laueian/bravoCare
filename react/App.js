@@ -1,28 +1,24 @@
 import React, {useState, useEffect} from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+
+import ShiftCard from './components/ShiftCard/ShiftCard';
+import RequestCard from './components/RequestCard/RequestCard';
 
 const App = () => {
-  const [text, setText] = useState('Loading...');
-  const [jobs, setJobs] = useState(false);
-  const [overlapShifts, setOverlapShifts] = useState(false);
+  const [shifts, setShifts] = useState([]);
+  const [overlapShifts, setOverlapShifts] = useState([]);
 
   useEffect(() => {
-    fetch('/foo').then(async response => {
-      const text = await response.text();
-      setText(text);
-    });
-
     getQuestionOneShifts();
     getShiftOverlap();
   }, []);
 
   function getQuestionOneShifts() {
-    fetch('/getQuestionOneShifts')
-      .then(res => {
-        return res.text();
-      })
-      .then(data => {
-        setJobs(data);
-      });
+    fetch('/getQuestionOneShifts').then(res => {
+      res.json().then(response => setShifts([...response]));
+    });
   }
 
   function getShiftOverlap() {
@@ -36,13 +32,20 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>{text}</h1>
-      {jobs ? jobs : 'There are no jobs'}
-      <br></br>
-      <br></br>
-      {overlapShifts ? overlapShifts : 'There are no shifts that overlap'}
-    </div>
+    <Container id="mainContainer">
+      <Container id="requestCardContainer">
+        <RequestCard></RequestCard>
+      </Container>
+      <Container id="shiftCardContainer">
+        <Row xs={1} sm={2} md={3} className="g-6">
+          {shifts.map((shift, idx) => (
+            <Col key={idx.toString()}>
+              <ShiftCard shiftData={shift}></ShiftCard>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </Container>
   );
 };
 

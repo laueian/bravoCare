@@ -1,12 +1,12 @@
 const express = require('express');
-const router = express();
+const app = express();
 
-router.get('/foo', (req, res) => res.send('Hello world!'));
+app.get('/foo', (req, res) => res.send('Hello world!'));
 
 const postgres = require('./postgres');
 
-router.use(express.json());
-router.use(function (req, res, next) {
+app.use(express.json('type'));
+app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader(
@@ -16,7 +16,7 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.get('/getQuestionOneShifts', (req, res) => {
+app.get('/getQuestionOneShifts', (req, res) => {
   postgres
     .getQuestionOneShifts()
     .then(response => {
@@ -27,7 +27,7 @@ router.get('/getQuestionOneShifts', (req, res) => {
     });
 });
 
-router.get('/getShiftOverlap', (req, res) => {
+app.get('/getShiftOverlap', (req, res) => {
   postgres
     .getShiftOverlap()
     .then(response => {
@@ -38,7 +38,7 @@ router.get('/getShiftOverlap', (req, res) => {
     });
 });
 
-module.exports = router;
+module.exports = app;
 
 if (module.hot) {
   module.hot.accept();

@@ -21,7 +21,7 @@ const getJobs = () => {
 
 const getQuestionOneShifts = () => {
   const query =
-    'SELECT q.*, f.facility_name FROM question_one_shifts as q INNER JOIN facilities  as f ON q.facility_id = f.facility_id;';
+    'SELECT q.*, f.facility_name FROM question_one_shifts as q INNER JOIN facilities as f ON q.facility_id = f.facility_id;';
 
   return new Promise(function (resolve, reject) {
     pool.query(query, (error, results) => {
