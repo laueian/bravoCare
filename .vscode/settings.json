@@ -1,0 +1,6 @@
+{
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.configPath": "C:\\Users\\elect\\Documents\\Jobs\\BravoCare\\BravoCareAssessment\\.prettierrc.js",
+    "editor.formatOnSave": true
+}
