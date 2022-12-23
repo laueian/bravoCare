@@ -20,10 +20,10 @@ const getJobs = () => {
 };
 
 const getQuestionOneShifts = () => {
-  const query =
-    'SELECT q.*, f.facility_name FROM question_one_shifts as q INNER JOIN facilities as f ON q.facility_id = f.facility_id;';
-
   return new Promise(function (resolve, reject) {
+    const query =
+      'SELECT q.*, f.facility_name FROM question_one_shifts as q INNER JOIN facilities as f ON q.facility_id = f.facility_id;';
+
     pool.query(query, (error, results) => {
       if (error) {
         reject(error);
@@ -34,96 +34,19 @@ const getQuestionOneShifts = () => {
   });
 };
 
-const getShiftOverlap = () => {
+const getShiftOverlap = body => {
   return new Promise(function (resolve, reject) {
-    // let result = {
-    //   overlapMin: null,
-    //   maxThreshold: null,
-    //   exceedsThreshold: null,
-    // };
+    const {shift_id_one, shift_id_two} = body;
+    const query =
+      'SELECT q.*, f.facility_name FROM question_one_shifts as q INNER JOIN facilities as f ON q.facility_id = f.facility_id AND q.shift_id IN ($1, $2)';
 
-    getQuestionOneShifts()
-      .then(response => {
-        let result = {
-          overlapMin: null,
-          maxThreshold: null,
-          exceedsThreshold: null,
-        };
-
-        // rows.push(response);
-        const shiftA = 3;
-        const shiftB = 0;
-
-        // split the time into an array as such [hh, mm, ss]
-        const endTimeSplit = response[shiftA].end_time.split(':');
-        const startTimeSplit = response[shiftB].start_time.split(':');
-
-        // convert the time into milliseconds
-        const endMilli =
-          Number(endTimeSplit[0] * 60 * 60 * 1000) +
-          Number(endTimeSplit[1] * 60 * 1000) +
-          Number(endTimeSplit[2] * 1000);
-
-        const startMilli =
-          Number(startTimeSplit[0] * 60 * 60 * 1000) +
-          Number(startTimeSplit[1] * 60 * 1000) +
-          Number(startTimeSplit[2] * 1000);
-
-        // load result
-
-        if (response[shiftA].facility_id === response[shiftB].facility_id) {
-          result.maxThreshold = 0;
-        } else {
-          result.maxThreshold = 30;
-        }
-
-        result.overlapMin = (endMilli - startMilli) / (60 * 1000);
-
-        if (result.overlapMin > result.maxThreshold) {
-          result.exceedsThreshold = true;
-        } else {
-          result.exceedsThreshold = false;
-        }
-
-        resolve(result);
-      })
-      .catch(error => {
+    pool.query(query, [shift_id_one, shift_id_two], (error, results) => {
+      if (error) {
         reject(error);
-      });
+      }
 
-    // const shiftA = 5;
-    // const shiftB = 0;
-
-    // // split the time into an array as such [hh, mm, ss]
-    // const endTimeSplit = rows[shiftA].end_time.split(':');
-    // const startTimeSplit = rows[shiftB].start_time.split(':');
-
-    // // convert the time into milliseconds
-    // const endMilli =
-    //   Number(endTimeSplit[0] * 60 * 60 * 1000) +
-    //   Number(endTimeSplit[1] * 60 * 1000) +
-    //   Number(endTimeSplit[2] * 1000);
-
-    // const startMilli =
-    //   Number(startTimeSplit[0] * 60 * 60 * 1000) +
-    //   Number(startTimeSplit[1] * 60 * 1000) +
-    //   Number(startTimeSplit[2] * 1000);
-
-    // if (rows[shiftA].facility_id === rows[shiftB].facility_id) {
-    //   result.maxThreshold = 0;
-    // } else {
-    //   result.maxThreshold = 30;
-    // }
-
-    // result.overlapMin = (endMilli - startMilli) / (60 * 1000);
-
-    // if (result.overlapMin > result.maxThreshold) {
-    //   result.exceedsThreshold = true;
-    // } else {
-    //   result.exceedsThreshold = false;
-    // }
-
-    // resolve(result);
+      resolve(results.rows);
+    });
   });
 };
 

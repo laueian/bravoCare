@@ -4,9 +4,14 @@ import Card from 'react-bootstrap/Card';
 
 const ShiftCard = ({disabled, addChecks, shiftKey, shiftData}) => {
   const [checked, setChecked] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    addChecks(checked);
+    if (loaded) {
+      addChecks(checked, shiftData.shift_id);
+    } else {
+      setLoaded(true);
+    }
   }, [checked]);
 
   const formattedTime = time => {

@@ -8,23 +8,21 @@ import RequestCard from './components/RequestCard/RequestCard';
 
 const App = () => {
   const [shifts, setShifts] = useState([]);
-  const [overlapShifts, setOverlapShifts] = useState([]);
-  const [checks, setChecks] = useState(6);
+  const [shiftsChecked, setShiftsChecked] = useState([]);
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     getQuestionOneShifts();
-    getShiftOverlap();
   }, []);
 
   // set the appropriate shift cards to disabled or enabled
   useEffect(() => {
-    if (checks === 2) {
+    if (shiftsChecked.length === 2) {
       setDisabled(true);
-    } else if (checks === 1 || checks === 0) {
+    } else if (shiftsChecked.length === 1 || shiftsChecked.length === 0) {
       setDisabled(false);
     }
-  }, [checks]);
+  }, [shiftsChecked]);
 
   function getQuestionOneShifts() {
     fetch('/getQuestionOneShifts').then(res => {
@@ -32,24 +30,18 @@ const App = () => {
     });
   }
 
-  function getShiftOverlap() {
-    fetch('/getShiftOverlap')
-      .then(res => {
-        return res.text();
-      })
-      .then(data => {
-        setOverlapShifts(data);
-      });
-  }
-
-  const addChecks = checked => {
-    checked ? setChecks(prev => prev + 1) : setChecks(prev => prev - 1);
+  const addChecks = (checked, shiftId) => {
+    if (checked === true) {
+      setShiftsChecked(prev => [...prev, shiftId]);
+    } else {
+      setShiftsChecked(prev => prev.filter(val => val !== shiftId));
+    }
   };
 
   return (
     <Container id="mainContainer">
       <Container id="requestCardContainer">
-        <RequestCard></RequestCard>
+        <RequestCard shiftsChecked={shiftsChecked}></RequestCard>
       </Container>
       <Container id="shiftCardContainer">
         <Row xs={1} sm={2} md={3} className="g-6">
