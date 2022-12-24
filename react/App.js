@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 
 import ShiftCard from './components/ShiftCard/ShiftCard';
 import RequestCard from './components/RequestCard/RequestCard';
+import QueryCard from './components/QueryCard/QueryCard';
 
 const App = () => {
   const [shifts, setShifts] = useState([]);
@@ -44,7 +45,7 @@ const App = () => {
         <RequestCard shiftsChecked={shiftsChecked}></RequestCard>
       </Container>
       <Container id="shiftCardContainer">
-        <Row xs={1} sm={2} md={3} className="g-6">
+        <Row xs={1} sm={2} md={3}>
           {shifts.map((shift, idx) => (
             <Col key={idx.toString()}>
               <ShiftCard
@@ -55,6 +56,9 @@ const App = () => {
             </Col>
           ))}
         </Row>
+      </Container>
+      <Container id="queryButtonsContainer">
+        <QueryCard></QueryCard>
       </Container>
     </Container>
   );

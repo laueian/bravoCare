@@ -50,4 +50,39 @@ const getShiftOverlap = body => {
   });
 };
 
-module.exports = {getJobs, getQuestionOneShifts, getShiftOverlap};
+const getQuery = body => {
+  return new Promise(function (resolve, reject) {
+    const {queryNumber} = body;
+
+    let query = '';
+
+    switch (queryNumber) {
+      case 4:
+        query =
+          'SELECT J.FACILITY_ID, J.JOB_ID, COUNT(DISTINCT (J.JOB_ID,J.FACILITY_ID)) AS TOTAL_HIRED, J.TOTAL_NUMBER_NURSES_NEEDED, (J.TOTAL_NUMBER_NURSES_NEEDED - COUNT(DISTINCT (J.JOB_ID, J.FACILITY_ID))) AS REMAINING_SPOTS FROM JOBS AS J INNER JOIN NURSE_HIRED_JOBS AS NHJ ON J.JOB_ID = NHJ.JOB_ID INNER JOIN NURSES AS N ON N.NURSE_ID = NHJ.NURSE_ID WHERE J.NURSE_TYPE_NEEDED = N.NURSE_TYPE GROUP BY J.FACILITY_ID, J.JOB_ID ORDER BY J.FACILITY_ID, J.JOB_ID';
+        break;
+      case 5:
+        break;
+      case 6:
+        break;
+
+      default:
+        break;
+    }
+
+    pool.query(query, (error, results) => {
+      if (error) {
+        reject(error);
+      }
+
+      resolve(results.rows);
+    });
+  });
+};
+
+module.exports = {
+  getJobs,
+  getQuestionOneShifts,
+  getShiftOverlap,
+  getQuery,
+};

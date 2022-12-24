@@ -41,6 +41,17 @@ app.post('/getShiftOverlap', (req, res) => {
     });
 });
 
+app.post('/getQuery', (req, res) => {
+  postgres
+    .getQuery(req.body)
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      res.status(500).send(error);
+    });
+});
+
 module.exports = app;
 
 if (module.hot) {
