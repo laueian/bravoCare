@@ -1,6 +1,13 @@
+// Build generic error message function to pass error but also add context to error
+// Might enrich errors if they are too generic.. sometimes only returning 500 isn't great
+// In terms of giving the user context on to fix error
+
+// Adding a validation library is you have any complied types or pattern requirements for numbers or strings
+
 const express = require('express');
 const app = express();
 
+// Should clean this up
 app.get('/foo', (req, res) => res.send('Hello world!'));
 
 const postgres = require('./postgres');
