@@ -1,4 +1,5 @@
 const Pool = require('pg').Pool;
+// All params should be a .env file that isn't checked intot the repo
 const pool = new Pool({
   user: 'dummyUser',
   host: 'localhost',
@@ -7,6 +8,8 @@ const pool = new Pool({
   port: 5432,
 });
 
+// This should implement pagination
+// At scale this is very dangerous query
 const getJobs = () => {
   return new Promise(function (resolve, reject) {
     pool.query('SELECT * FROM jobs', (error, results) => {
@@ -21,8 +24,11 @@ const getJobs = () => {
 
 const getQuestionOneShifts = () => {
   return new Promise(function (resolve, reject) {
+    // NBD - might want to style string to only be minum 100 char person line as to make query more readable
     const query =
-      'SELECT q.*, f.facility_name FROM question_one_shifts as q INNER JOIN facilities as f ON q.facility_id = f.facility_id;';
+      'SELECT q.*, f.facility_name \
+       FROM question_one_shifts as q \
+       INNER JOIN facilities as f ON q.facility_id = f.facility_id;';
 
     pool.query(query, (error, results) => {
       if (error) {
@@ -36,7 +42,7 @@ const getQuestionOneShifts = () => {
 
 const getShiftOverlap = body => {
   return new Promise(function (resolve, reject) {
-    const {shift_id_one, shift_id_two} = body;
+    const { shift_id_one, shift_id_two } = body;
     const query =
       'SELECT q.*, f.facility_name FROM question_one_shifts as q INNER JOIN facilities as f ON q.facility_id = f.facility_id AND q.shift_id IN ($1, $2)';
 
@@ -52,7 +58,7 @@ const getShiftOverlap = body => {
 
 const getQuery = body => {
   return new Promise(function (resolve, reject) {
-    const {queryNumber} = body;
+    const { queryNumber } = body;
 
     let query = '';
 
