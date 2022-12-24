@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -23,7 +23,6 @@ const RequestCard = ({shiftsChecked}) => {
       })
       .then(data => {
         setOverlapShifts(JSON.parse(data));
-        // console.log(data);
       });
   }
 
@@ -36,7 +35,7 @@ const RequestCard = ({shiftsChecked}) => {
   return (
     <Card bg={'light'} style={{marginTop: '1rem'}}>
       <Card.Body>
-        <Row>
+        <Row className={'align-items-center'}>
           <Col sm={9}>
             {overlapShifts !== null ? (
               <>
@@ -52,8 +51,12 @@ const RequestCard = ({shiftsChecked}) => {
               </>
             )}
           </Col>
-          <Col sm={1}>
-            <Button onClick={handleClick} variant="secondary">
+          <Col sm={3}>
+            <Button
+              style={{width: '100%'}}
+              size="lg"
+              onClick={handleClick}
+              variant="secondary">
               Submit
             </Button>
           </Col>
