@@ -56,7 +56,8 @@ const RequestCard = ({shiftsChecked}) => {
               style={{width: '100%'}}
               size="lg"
               onClick={handleClick}
-              variant="secondary">
+              disabled={shiftsChecked.length === 2 ? false : true}
+              variant="primary">
               Submit
             </Button>
           </Col>

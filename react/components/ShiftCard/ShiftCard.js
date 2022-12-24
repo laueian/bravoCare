@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import Card from 'react-bootstrap/Card';
+import './ShiftCard.css';
 
 const ShiftCard = ({disabled, addChecks, shiftKey, shiftData}) => {
   const [checked, setChecked] = useState(false);
@@ -34,10 +35,10 @@ const ShiftCard = ({disabled, addChecks, shiftKey, shiftData}) => {
 
   return (
     <ToggleButton
-      className="mb-2"
+      className="toggle-button"
       id={`${shiftKey}`}
       type={'checkbox'}
-      variant={'secondary'}
+      variant={'primary'}
       disabled={checked ? false : disabled}
       checked={checked}
       onChange={e => setChecked(e.currentTarget.checked)}
